@@ -3,8 +3,10 @@ import { combineReducers } from 'redux';
 import {
   CREATE_POST,
   REMOVE_POST,
+  FETCH_POSTS,
   ADD_COMMENT,
-  REMOVE_COMMENT
+  REMOVE_COMMENT,
+  FETCH_CATEGORIES
 } from '../actions';
 
 function post(state = { posts: [] }, action) {
@@ -31,6 +33,12 @@ function post(state = { posts: [] }, action) {
       return {
         ...state,
         posts: state.posts.filter(post => (post.id !== id))
+      };
+    case FETCH_POSTS:
+      const { posts } = action;
+      return {
+        ...state,
+        posts
       };
     default:
       return {
@@ -71,7 +79,23 @@ function comment(state = { comments: [] }, action) {
   }
 }
 
+function category(state = { categories: [] }, action) {
+  switch (action.type) {
+    case FETCH_CATEGORIES:
+      const { categories } = action;
+      return {
+        ...state,
+        categories
+      };
+    default:
+      return {
+        ...state
+      };
+  }
+}
+
 export default combineReducers({
   post,
-  comment
+  comment,
+  category
 });

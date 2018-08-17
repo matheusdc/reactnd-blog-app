@@ -4,19 +4,26 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchPosts } from '../actions';
+
+import Post from './Post'
 
 class Posts extends Component {
+
+  componentDidMount() {
+    this.props.fetchData();
+  }
+
   render() {
-    console.log(this.props.posts);
     return (
       <div>
         <ul>
           {this.props.posts.map(post => (
-            <li key={post.id}>{post.name}</li>
+            <li key={post.id}><Post {...post} /></li>
           ))}
         </ul>
       </div>
-    )
+    );
   }
 }
 
@@ -28,9 +35,16 @@ function mapStateToProps({ post, comment }) {
         comments: comment.comments.filter(c => c.parentId === p.id)
       };
     })
-  }
+  };
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+      fetchData: () => dispatch(fetchPosts())
+  };
+};
+
 export default connect(
-  mapStateToProps
-)(Posts)
+  mapStateToProps,
+  mapDispatchToProps
+)(Posts);
