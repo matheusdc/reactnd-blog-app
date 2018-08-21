@@ -21,6 +21,7 @@ class Categories extends Component {
           {this.props.categories.map(category => (
             <li key={category.name}><Link to={'/category/' + category.path}>{category.name}</Link></li>
           ))}
+          <li><Link to="/">All categories</Link></li>
         </ul>
       </div>
     )

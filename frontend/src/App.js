@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import Posts from './components/Posts';
 import NewPost from './components/NewPost';
 import Categories from './components/Categories';
 
+import { fetchPosts } from './actions';
+import CategoryPage from './pages/CategoryPage';
+import PostDetails from './components/PostDetails';
+
 class App extends Component {
-
-  componentDidMount() {
-
-  }
 
   render() {
     return (
@@ -19,13 +19,34 @@ class App extends Component {
         <h1>Categories</h1>
         <Categories />
 
-        <h1>Posts</h1>
-        <Posts />
-
+        <Route exact path="/" component={CategoryPage}/>
+        <Route exact path="/category/:id" component={CategoryPage}/>
         <Route exact path="/new" component={NewPost}/>
+        <Route exact path="/post/:id" component={PostDetails}/>
+        
       </div>
     );
   }
 }
 
-export default App;
+function mapStateToProps({ post, comment }) {
+  return {
+    posts: post.posts.map(p => {
+      return {
+        ...p,
+        comments: comment.comments.filter(c => c.parentId === p.id)
+      };
+    })
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      fetchData: () => dispatch(fetchPosts())
+  };
+};
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App));

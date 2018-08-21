@@ -79,13 +79,20 @@ export function fetchData(url, callback) {
 }
 
 export function fetchPosts() {
-  return fetchData('/posts', postsFetchSuccess)
+  return fetchData('/posts', postsFetchSuccess);
 }
 
 export function fetchComments() {
-  return fetchData('/comments', commentsFetchSuccess)
+  return fetchData('/comments', commentsFetchSuccess);
 }
 
 export function fetchCategories() {
-  return fetchData('/categories', categoriesFetchSuccess)
+  return fetchData('/categories', categoriesFetchSuccess);
+}
+
+export function fetchPostsByCategory(category) {
+  if(typeof category === 'undefined') {
+    return fetchPosts();
+  }
+  return fetchData(`/${category}/posts`, postsFetchSuccess);
 }

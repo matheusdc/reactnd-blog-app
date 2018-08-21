@@ -2,14 +2,12 @@
  * Class that represent the Post list 
  */
 
-import React, { Component } from 'react';
+import React from 'react';
 
-class NewPost extends Component {
-    render() {
-        return (
-            <h1>New Post!!</h1>
-        )
-    }
+const NewPost = ({ match }) => {
+    return (
+        <h1>New Post!! { match.params.id }</h1> 
+    )
 }
 
  export default NewPost;
