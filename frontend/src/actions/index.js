@@ -1,9 +1,13 @@
 export const CREATE_POST = 'CREATE_POST';
+export const UPVOTE_POST = 'UPVOTE_POST';
+export const DOWNVOTE_POST = 'DOWNVOTE_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 export const FETCH_POSTS = 'FETCH_POSTS';
 export const FETCH_ACTIVE_POST = 'FETCH_ACTIVE_POSTS';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
+export const UPVOTE_COMMENT = 'UPVOTE_COMMENT';
+export const DOWNVOTE_COMMENT = 'DOWNVOTE_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 
@@ -17,6 +21,20 @@ export function createPost({ id, title, author, body, category }) {
     author,
     body,
     category
+  };
+}
+
+export function upVotePost({ id }) {
+  return {
+    type: UPVOTE_POST,
+    id
+  };
+}
+
+export function downVotePost({ id }) {
+  return {
+    type: DOWNVOTE_POST,
+    id
   };
 }
 
@@ -34,6 +52,20 @@ export function addComment({ id, parentId, author, body }) {
     parentId,
     author,
     body
+  };
+}
+
+export function upVoteComment({ id }) {
+  return {
+    type: UPVOTE_COMMENT,
+    id
+  };
+}
+
+export function downVoteComment({ id }) {
+  return {
+    type: DOWNVOTE_COMMENT,
+    id
   };
 }
 
@@ -81,11 +113,17 @@ export function submitCommentToServer(data) {
 }
 
 export function votePost(id, vote) {
-  return postData(`/posts/${id}`, { option: vote});
+  if(vote === 'upVote') {
+    return postData(`/posts/${id}`, { option: vote }, upVotePost);
+  }
+  return postData(`/posts/${id}`, { option: vote }, downVotePost);
 }
 
 export function voteComment(id, vote) {
-  return postData(`/comments/${id}`, { option: vote});
+  if(vote === 'upVote') {
+    return postData(`/comments/${id}`, { option: vote }, upVoteComment);
+  }
+  return postData(`/comments/${id}`, { option: vote }, downVoteComment);
 }
 
 export function postData(url, payload, callback) {

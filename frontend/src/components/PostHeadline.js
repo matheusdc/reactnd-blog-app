@@ -11,11 +11,13 @@ const PostHeadline = (props) => {
       <div className="card-content">
         <p className="title">
           <Link to={`/posts/${props.id}`} style={{ textDecoration: 'none' }} className="title">
-            {props.title}
+            { props.title }
           </Link>
+          <span className="tag is-light">{props.category}</span>
         </p>
         <p className="subtitle">{`${props.author}`}</p>
-        <span className="tag is-primary">{props.category}</span>
+        <p>Vote Score: {props.voteScore}</p>
+
         <p>{props.body}</p>
       </div>
     </div>

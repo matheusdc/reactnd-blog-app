@@ -6421,3 +6421,6 @@ label.panel-block {
 
 html {
   margin: 64px; }
+
+.tag {
+  margin-left: 5px; }

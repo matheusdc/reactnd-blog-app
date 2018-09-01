@@ -16,16 +16,25 @@ class Categories extends Component {
 
   render() {
     return (
-      <nav className="panel column is-one-quarter">
-        <p className="panel-heading">
-          Categories
-        </p>
-        {this.props.categories.map(category => (
-          <Link to={'/category/' + category.path} className="panel-block" key={category.name}>{category.name}</Link>
-        ))}
-        <Link to="/" className="panel-block" key='allcategories'>All categories</Link>
-        <Link to="/new" className="panel-block" key='newpost'>Create a Post</Link>
-      </nav>
+      <div className="column is-one-quarter">
+        <aside className="menu">
+          <p className="menu-label">
+            Categories
+          </p>
+          <ul className="menu-list">
+            {this.props.categories.map(category => (
+              <li key={category.name}><Link to={'/category/' + category.path}>{category.name}</Link></li>
+            ))}
+            <li key='allcategories'><Link to="/">All categories</Link></li>
+          </ul>
+          <p className="menu-label">
+            Administration
+          </p>
+          <ul className="menu-list">
+            <li><Link to="/new" key='newpost'>Create a Post</Link></li>
+          </ul>
+        </aside>
+      </div>
     )
   };
 }

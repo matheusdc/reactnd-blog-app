@@ -3,6 +3,7 @@
  */
 
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { submitPostToServer } from '../actions/index';
 
@@ -26,7 +27,8 @@ class NewPost extends Component {
     const category = this.category.current.value;
     const id = uuidv1();
 
-    this.props.createPost({ id, timestamp: new Date(), title, author, body, category });
+    this.props.createPost({ id, timestamp: new Date().getTime(), title, author, body, category });
+    this.props.history.push('/');
   }
 
   render() {
@@ -77,7 +79,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
+export default withRouter(connect(
   null,
   mapDispatchToProps
-)(NewPost);
+)(NewPost));

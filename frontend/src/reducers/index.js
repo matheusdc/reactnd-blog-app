@@ -2,10 +2,14 @@ import { combineReducers } from 'redux';
 
 import {
   CREATE_POST,
+  UPVOTE_POST,
+  DOWNVOTE_POST,
   REMOVE_POST,
   FETCH_POSTS,
   FETCH_ACTIVE_POST,
   ADD_COMMENT,
+  UPVOTE_COMMENT,
+  DOWNVOTE_COMMENT,
   REMOVE_COMMENT,
   FETCH_CATEGORIES,
   FETCH_COMMENTS
@@ -30,6 +34,16 @@ function post(state = { posts: [] }, action) {
       return {
         ...state,
         posts: state.posts.concat([post])
+      };
+    case UPVOTE_POST:
+      return {
+        ...state,
+        activePost: {...state.activePost, voteScore: state.activePost.voteScore + 1}
+      };
+    case DOWNVOTE_POST:
+      return {
+        ...state,
+        activePost: {...state.activePost, voteScore: state.activePost.voteScore - 1}
       };
     case REMOVE_POST:
       return {
@@ -65,7 +79,7 @@ function comment(state = { comments: [] }, action) {
         parentId,
         author,
         body,
-        timestamp: new Date(),
+        timestamp: new Date().getTime(),
         voteScore: 1,
         deleted: false,
         parentDeleted: false
@@ -79,6 +93,22 @@ function comment(state = { comments: [] }, action) {
       return {
         ...state,
         comments: state.comments.filter(comment => (comment.id !== id))
+      };
+    case UPVOTE_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.map(comment => {
+          if(comment.id === id) comment.voteScore = comment.voteScore + 1;
+          return comment; 
+        })
+      };
+    case DOWNVOTE_COMMENT:
+      return {
+        ...state,
+        comments: state.comments.map(comment => {
+          if(comment.id === id) comment.voteScore = comment.voteScore - 1;
+          return comment;
+        })
       };
     case FETCH_COMMENTS:
       const { comments } = action;
