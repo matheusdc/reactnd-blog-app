@@ -1,6 +1,7 @@
 export const CREATE_POST = 'CREATE_POST';
 export const REMOVE_POST = 'REMOVE_POST';
 export const FETCH_POSTS = 'FETCH_POSTS';
+export const FETCH_ACTIVE_POST = 'FETCH_ACTIVE_POSTS';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
@@ -55,10 +56,39 @@ export function postsFetchSuccess(posts) {
   };
 }
 
+export function fetchActivePostSuccess(activePost) {
+  return {
+    type: FETCH_ACTIVE_POST,
+    activePost
+  };
+}
+
 export function categoriesFetchSuccess(categories) {
   return {
     type: FETCH_CATEGORIES,
     categories: categories.categories
+  };
+}
+
+export function submitPostToServer(data) {
+  return postData('/posts', data, createPost);
+}
+
+export function postData(url, payload, callback) {
+  return (dispatch) => {
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Authorization': 'whatever-you-want', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response;
+    })
+    .then((response) => response.json())
+    .then((data) => dispatch(callback({ data })))
   };
 }
 
@@ -82,8 +112,12 @@ export function fetchPosts() {
   return fetchData('/posts', postsFetchSuccess);
 }
 
-export function fetchComments() {
-  return fetchData('/comments', commentsFetchSuccess);
+export function fetchPostById(id) {
+  return fetchData(`/posts/${id}`, fetchActivePostSuccess);
+}
+
+export function fetchCommentsFromPost(postId) {
+  return fetchData(`/posts/${postId}/comments`, commentsFetchSuccess);
 }
 
 export function fetchCategories() {

@@ -4,20 +4,22 @@ import {
   CREATE_POST,
   REMOVE_POST,
   FETCH_POSTS,
+  FETCH_ACTIVE_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
-  FETCH_CATEGORIES
+  FETCH_CATEGORIES,
+  FETCH_COMMENTS
 } from '../actions';
 
 function post(state = { posts: [] }, action) {
   switch (action.type) {
     case CREATE_POST:
-      const { title, author, body, category } = action;
+      const { title, author, body, category, timestamp } = action;
       const post = {
         title,
         author,
         body,
-        timestamp: new Date(),
+        timestamp,
         category,
         voteScore: 1,
         deleted: false
@@ -39,6 +41,12 @@ function post(state = { posts: [] }, action) {
       return {
         ...state,
         posts
+      };
+    case FETCH_ACTIVE_POST:
+      const { activePost } = action;
+      return {
+        ...state,
+        activePost
       };
     default:
       return {
@@ -71,6 +79,13 @@ function comment(state = { comments: [] }, action) {
       return {
         ...state,
         comments: state.comments.filter(comment => (comment.id !== id))
+      };
+    case FETCH_COMMENTS:
+      const { comments } = action;
+
+      return {
+        ...state,
+        comments
       };
     default:
       return {
