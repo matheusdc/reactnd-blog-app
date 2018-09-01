@@ -6424,3 +6424,6 @@ html {
 
 .tag {
   margin-left: 5px; }
+
+.comment, .post {
+  margin-bottom: 10px; }

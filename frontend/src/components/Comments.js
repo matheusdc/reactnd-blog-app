@@ -28,7 +28,7 @@ class Comments extends Component {
     return (
       <div>
         {this.props.comments.filter(comment => !comment.deleted).map((comment) => (
-            <div className="card" key={comment.id}>
+            <div className="card comment" key={comment.id}>
               <div className="card-content">
                 <p>{comment.body}</p>
               </div>

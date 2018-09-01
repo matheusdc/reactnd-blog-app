@@ -28,24 +28,27 @@ class NewComment extends Component {
 
   render() {
     return (
-      <div>
-        <div className="field">
-          <label className="label">Author</label>
-          <div className="control">
-          <input className="input" type="text" ref={this.author} placeholder="Author" />
+      <div className="card comment">
+        <div className="card-content">
+          <div className="subtitle">Leave a comment!</div>
+          <div className="field">
+            <label className="label is-small">Author</label>
+            <div className="control">
+            <input className="input is-small" type="text" ref={this.author} placeholder="Author" />
+            </div>
           </div>
-        </div>
 
-        <div className="field">
-          <label className="label">Comment</label>
-          <div className="control">
-          <textarea className="textarea" ref={this.body} placeholder="Comment" />
+          <div className="field">
+            <label className="label is-small">Comment</label>
+            <div className="control">
+            <textarea className="textarea is-small" ref={this.body} placeholder="Comment" />
+            </div>
           </div>
-        </div>
 
-        <div className="field">
-          <div className="control">
-            <button onClick={this.handleSubmit} className="button is-link">Submit</button>
+          <div className="field">
+            <div className="control">
+              <button onClick={this.handleSubmit} className="button is-link is-small">Comment!</button>
+            </div>
           </div>
         </div>
       </div>

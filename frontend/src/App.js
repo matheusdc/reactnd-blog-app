@@ -7,7 +7,7 @@ import NewPost from './components/NewPost';
 import Categories from './components/Categories';
 
 import CategoryPage from './pages/CategoryPage';
-import PostDetails from './components/PostDetails';
+import PostPage from './pages/PostPage';
 
 class App extends Component {
 
@@ -19,7 +19,7 @@ class App extends Component {
         <Route exact path="/" component={CategoryPage}/>
         <Route exact path="/category/:id" component={CategoryPage}/>
         <Route exact path="/new" component={NewPost}/>
-        <Route exact path="/posts/:id" component={PostDetails}/>
+        <Route exact path="/posts/:id" component={PostPage}/>
       </div>
     );
   }
