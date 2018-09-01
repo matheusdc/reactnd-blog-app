@@ -13,8 +13,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <h1>Categories</h1>
+      <div className="columns">
         <Categories />
 
         <Route exact path="/" component={CategoryPage}/>

@@ -9,9 +9,10 @@ export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 
 export const FETCH_CATEGORIES = 'FETCH_CATEGORIES';
 
-export function createPost({ title, author, body, category }) {
+export function createPost({ id, title, author, body, category }) {
   return {
     type: CREATE_POST,
+    id,
     title,
     author,
     body,
@@ -26,9 +27,10 @@ export function removePost({ id }) {
   };
 }
 
-export function addComment({ parentId, author, body }) {
+export function addComment({ id, parentId, author, body }) {
   return {
     type: ADD_COMMENT,
+    id,
     parentId,
     author,
     body
@@ -74,6 +76,18 @@ export function submitPostToServer(data) {
   return postData('/posts', data, createPost);
 }
 
+export function submitCommentToServer(data) {
+  return postData('/comments', data, addComment);
+}
+
+export function votePost(id, vote) {
+  return postData(`/posts/${id}`, { option: vote});
+}
+
+export function voteComment(id, vote) {
+  return postData(`/comments/${id}`, { option: vote});
+}
+
 export function postData(url, payload, callback) {
   return (dispatch) => {
     fetch(url, {
@@ -88,7 +102,7 @@ export function postData(url, payload, callback) {
       return response;
     })
     .then((response) => response.json())
-    .then((data) => dispatch(callback({ data })))
+    .then((data) => dispatch(callback(data)))
   };
 }
 
@@ -105,6 +119,49 @@ export function fetchData(url, callback) {
       })
       .then((response) => response.json())
       .then((data) => dispatch(callback(data)))
+  };
+}
+
+export function deletePost(id) {
+  return deleteData(`/posts/${id}`, removePost);
+}
+
+export function deleteComment(id) {
+  return deleteData(`/comments/${id}`, removeComment);
+}
+
+export function deleteData(url, callback) {
+  return (dispatch) => {
+    fetch(url, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'whatever-you-want' }
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response;
+    })
+    .then((response) => response.json())
+    .then((data) => dispatch(callback(data)))
+  };
+}
+
+export function putData(url, payload, callback) {
+  return (dispatch) => {
+    fetch(url, {
+      method: 'PUT',
+      headers: { 'Authorization': 'whatever-you-want', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response;
+    })
+    .then((response) => response.json())
+    .then((data) => dispatch(callback(data)))
   };
 }
 

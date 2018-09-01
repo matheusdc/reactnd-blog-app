@@ -12,10 +12,12 @@ import {
 } from '../actions';
 
 function post(state = { posts: [] }, action) {
+  const { id, title, author, body, category, timestamp } = action;
+
   switch (action.type) {
     case CREATE_POST:
-      const { title, author, body, category, timestamp } = action;
       const post = {
+        id,
         title,
         author,
         body,
@@ -30,8 +32,6 @@ function post(state = { posts: [] }, action) {
         posts: state.posts.concat([post])
       };
     case REMOVE_POST:
-      const { id } = action;
-
       return {
         ...state,
         posts: state.posts.filter(post => (post.id !== id))
@@ -56,10 +56,12 @@ function post(state = { posts: [] }, action) {
 }
 
 function comment(state = { comments: [] }, action) {
+  const { id, parentId, author, body } = action;
+
   switch (action.type) {
     case ADD_COMMENT:
-      const { parentId, author, body } = action;
       const comment = {
+        id,
         parentId,
         author,
         body,
@@ -74,8 +76,6 @@ function comment(state = { comments: [] }, action) {
         comments: state.comments.concat([comment])
       };
     case REMOVE_COMMENT:
-      const { id } = action;
-
       return {
         ...state,
         comments: state.comments.filter(comment => (comment.id !== id))

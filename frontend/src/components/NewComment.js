@@ -4,42 +4,31 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { submitPostToServer } from '../actions/index';
+import { submitCommentToServer } from '../actions/index';
 
 const uuidv1 = require('uuid/v1');
 
-class NewPost extends Component {
+class NewComment extends Component {
   constructor(props) {
     super(props);
-    this.title = React.createRef();
     this.body = React.createRef();
     this.author = React.createRef();
-    this.category = React.createRef();
 
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit() {
-    const title = this.title.current.value;
     const author = this.author.current.value;
     const body = this.body.current.value;
-    const category = this.category.current.value;
+    const parentId = this.props.post.id;
     const id = uuidv1();
 
-    this.props.createPost({ id, timestamp: new Date(), title, author, body, category });
+    this.props.addComment({ id, timestamp: new Date(), parentId, author, body });
   }
 
   render() {
     return (
-      <div className="column">
-        <h1 className="title">Create a new post</h1>
-        <div className="field">
-          <label className="label">Title</label>
-          <div className="control">
-            <input className="input" type="text" ref={this.title} placeholder="Title" />
-          </div>
-        </div>
-
+      <div>
         <div className="field">
           <label className="label">Author</label>
           <div className="control">
@@ -48,16 +37,9 @@ class NewPost extends Component {
         </div>
 
         <div className="field">
-          <label className="label">Category</label>
+          <label className="label">Comment</label>
           <div className="control">
-          <input className="input" type="text" ref={this.category} placeholder="Category" />
-          </div>
-        </div>
-
-        <div className="field">
-          <label className="label">Message</label>
-          <div className="control">
-          <textarea className="textarea" ref={this.body} placeholder="Body" />
+          <textarea className="textarea" ref={this.body} placeholder="Comment" />
           </div>
         </div>
 
@@ -73,11 +55,11 @@ class NewPost extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    createPost: (post) => dispatch(submitPostToServer(post))
+    addComment: (comment) => dispatch(submitCommentToServer(comment))
   };
 };
 
 export default connect(
   null,
   mapDispatchToProps
-)(NewPost);
+)(NewComment);

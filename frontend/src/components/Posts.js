@@ -7,14 +7,12 @@ import React from 'react';
 import PostHeadline from './PostHeadline'
 
 const Posts = (props) => {
+  
   return (
     <div>
-      <h1>Posts</h1>
-      <ul>
-        {props.posts.map(post => (
-          <li key={post.id}><PostHeadline {...post} /></li>
-        ))}
-      </ul>
+      {props.posts.filter(post => !post.deleted).map(post => (
+        <div key={post.id}><PostHeadline {...post} /></div>
+      ))}
     </div>
   );
 }

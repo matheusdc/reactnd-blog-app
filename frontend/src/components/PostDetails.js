@@ -7,24 +7,37 @@ import React, { Component } from 'react';
 import PostHeadline from './PostHeadline';
 import { connect } from 'react-redux';
 
-import { fetchPostById, fetchCommentsFromPost } from '../actions';
+import { fetchPostById, fetchCommentsFromPost, deletePost } from '../actions';
+import NewComment from './NewComment';
+import Comments from './Comments';
 
 class PostDetails extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.handleDeletion = this.handleDeletion.bind(this);
+  }
 
   componentDidMount() {
     this.props.fetchPostById(this.props.match.params.id);
     this.props.fetchCommentsFromPost(this.props.match.params.id);
   }
 
+  handleDeletion() {
+    this.props.deletePost(this.props.post.id);
+  }
+
   render() {
     return (
-      <div>
+      <div className="column">
         <PostHeadline {...this.props.post} />
-        <ul>
-          {this.props.comments.map((comment) => (
-            <li key={comment.id}>{ comment.body }</li>
-          ))}
-        </ul>
+
+        <a className="button is-danger" onClick={this.handleDeletion}>Delete Post</a>
+
+        <NewComment post={this.props.post} />
+
+        <Comments comments={this.props.comments}/>
       </div>
     );
   }
@@ -40,7 +53,8 @@ function mapStateToProps({ post, comment }) {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPostById: (id) => dispatch(fetchPostById(id)),
-    fetchCommentsFromPost: (PostId) => dispatch(fetchCommentsFromPost(PostId))
+    fetchCommentsFromPost: (PostId) => dispatch(fetchCommentsFromPost(PostId)),
+    deletePost: (id) => dispatch(deletePost(id))
   };
 };
 

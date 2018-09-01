@@ -29,8 +29,8 @@ class CategoryPage extends Component {
   render() {
     const categoryName = this.props.match.params.id;
     return (
-      <div>
-        <h2>{(categoryName) ? categoryName + ' Category' : 'All Categories'}</h2>
+      <div className="column">
+        <h2 className="title">{(categoryName) ? categoryName + ' Category' : 'All Categories'}</h2>
         <Posts posts={this.props.posts} />
       </div>
     );

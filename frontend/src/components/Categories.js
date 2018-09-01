@@ -13,17 +13,19 @@ class Categories extends Component {
   componentDidMount() {
     this.props.fetchData();
   }
-  
+
   render() {
     return (
-      <div>
-        <ul>
-          {this.props.categories.map(category => (
-            <li key={category.name}><Link to={'/category/' + category.path}>{category.name}</Link></li>
-          ))}
-          <li><Link to="/">All categories</Link></li>
-        </ul>
-      </div>
+      <nav className="panel column is-one-quarter">
+        <p className="panel-heading">
+          Categories
+        </p>
+        {this.props.categories.map(category => (
+          <Link to={'/category/' + category.path} className="panel-block" key={category.name}>{category.name}</Link>
+        ))}
+        <Link to="/" className="panel-block" key='allcategories'>All categories</Link>
+        <Link to="/new" className="panel-block" key='newpost'>Create a Post</Link>
+      </nav>
     )
   };
 }
