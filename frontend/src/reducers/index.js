@@ -8,6 +8,8 @@ import {
   FETCH_POSTS,
   FETCH_ACTIVE_POST,
   ADD_COMMENT,
+  EDIT_COMMENT,
+  EDITING_COMMENT,
   UPVOTE_COMMENT,
   DOWNVOTE_COMMENT,
   REMOVE_COMMENT,
@@ -69,7 +71,7 @@ function post(state = { posts: [] }, action) {
   }
 }
 
-function comment(state = { comments: [] }, action) {
+function comment(state = { comments: [], editingComment: '' }, action) {
   const { id, parentId, author, body } = action;
 
   switch (action.type) {
@@ -89,6 +91,31 @@ function comment(state = { comments: [] }, action) {
         ...state,
         comments: state.comments.concat([comment])
       };
+
+    case EDIT_COMMENT:
+      const editedComment = {
+        id,
+        parentId,
+        author,
+        body,
+        timestamp: new Date().getTime(),
+      };
+
+      const editedComments = state.comments.map(comment => 
+        (comment.id === editedComment.id) ? editedComment : comment);
+
+      return {
+        ...state,
+        comments: editedComments,
+        editingComment: ''
+      };
+
+    case EDITING_COMMENT:
+      return {
+        ...state,
+        editingComment: id
+      }
+    
     case REMOVE_COMMENT:
       return {
         ...state,

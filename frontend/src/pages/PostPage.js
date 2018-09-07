@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { fetchPostById, fetchCommentsFromPost, deletePost, votePost } from '../actions';
-import NewComment from '../components/NewComment';
+import CommentEditor from '../components/CommentEditor';
 import Comments from '../components/Comments';
 import PostDetails from '../components/PostDetails';
 
@@ -45,7 +45,7 @@ class PostPage extends Component {
           <span className="button is-small is-danger" onClick={this.handleDeletion}>Delete Post</span>
         </div>
 
-        <NewComment post={this.props.post} />
+        <CommentEditor post={this.props.post} />
 
         <Comments comments={this.props.comments}/>
       </div>

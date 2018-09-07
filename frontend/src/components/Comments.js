@@ -5,15 +5,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { deleteComment, voteComment } from '../actions';
+import { deleteComment, voteComment, editingComment } from '../actions';
+import CommentEditor from './CommentEditor';
+import Comment from './Comment';
 
 class Comments extends Component {
 
   constructor(props) {
     super(props);
 
+    this.state = {
+      editing: ''
+    };
+
     this.handleDeletion = this.handleDeletion.bind(this);
     this.handleVote = this.handleVote.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   handleDeletion(id) {
@@ -24,40 +31,44 @@ class Comments extends Component {
     this.props.voteComment(id, vote);
   }
 
+  handleUpdate(id) {
+    this.props.editComment({ id });
+  }
+
   render() {
+    const editingComment = this.props.editingComment;
     return (
       <div>
-        {this.props.comments.filter(comment => !comment.deleted).map((comment) => (
-            <div className="card comment" key={comment.id}>
-              <div className="card-content">
-                <p>{comment.body}</p>
-              </div>
-              <footer className="card-footer">
-                <div className="card-footer-item">{comment.author}</div>
-                <div className="card-footer-item">Vote Score: {comment.voteScore}</div>
-                <div className="card-footer-item">
-                  <div className="buttons has-addons">
-                    <span className="button is-small is-success" onClick={() => this.handleVote(comment.id, 'upVote')}>Upvote</span>
-                    <span className="button is-small is-warning" onClick={() => this.handleVote(comment.id, 'downVote')}>Downvote</span>
-                    <span className="button is-small is-danger" onClick={() => this.handleDeletion(comment.id)}>Delete</span>
-                  </div>
-                </div>
-              </footer>
-            </div>
-          ))}
+        {this.props.comments.filter(comment => !comment.deleted).map((comment) => {
+          if(editingComment === comment.id) {
+            return (<CommentEditor key={comment.id} {...comment} />)
+          }
+          return (<Comment key={comment.id} {...comment}
+            handleVote={this.handleVote}
+            handleUpdate={this.handleUpdate}
+            handleDeletion={this.handleDeletion} />);
+        }
+        )}
       </div>
     );
   }
 }
 
+function mapStateToProps({ comment }) {
+  return {
+    editingComment: comment.editingComment
+  };
+}
+
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteComment: (id) => dispatch(deleteComment(id)),
-    voteComment: (id, vote) => dispatch(voteComment(id, vote))
+    voteComment: (id, vote) => dispatch(voteComment(id, vote)),
+    editComment: (id) => dispatch(editingComment(id)),
   };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Comments);

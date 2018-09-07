@@ -6,6 +6,8 @@ export const FETCH_POSTS = 'FETCH_POSTS';
 export const FETCH_ACTIVE_POST = 'FETCH_ACTIVE_POSTS';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
+export const EDIT_COMMENT = 'EDIT_COMMENT';
+export const EDITING_COMMENT = 'EDITING_COMMENT';
 export const UPVOTE_COMMENT = 'UPVOTE_COMMENT';
 export const DOWNVOTE_COMMENT = 'DOWNVOTE_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
@@ -52,6 +54,24 @@ export function addComment({ id, parentId, author, body }) {
     parentId,
     author,
     body
+  };
+}
+
+export function editComment({ id, parentId, timestamp, author, body }) {
+  return {
+    type: EDIT_COMMENT,
+    id,
+    parentId,
+    timestamp,
+    author,
+    body
+  };
+}
+
+export function editingComment({ id }) {
+  return {
+    type: EDITING_COMMENT,
+    id
   };
 }
 
@@ -183,6 +203,10 @@ export function deleteData(url, callback) {
     .then((response) => response.json())
     .then((data) => dispatch(callback(data)))
   };
+}
+
+export function sendCommentEditsToServer(comment) {
+  return putData(`/comments/${comment.id}`, comment, editComment);
 }
 
 export function putData(url, payload, callback) {
