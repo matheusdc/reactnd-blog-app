@@ -18,6 +18,7 @@ class PostPage extends Component {
 
     this.handleDeletion = this.handleDeletion.bind(this);
     this.handleVote = this.handleVote.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +35,10 @@ class PostPage extends Component {
     this.props.handleVote(id, vote);
   }
 
+  handleUpdate(id) {
+    this.props.history.push(`/edit/${id}`);
+  }
+
   render() {
     return (
       <div className="column">
@@ -41,6 +46,7 @@ class PostPage extends Component {
 
         <div className="buttons has-addons">
           <span className="button is-small is-success" onClick={() => this.handleVote(this.props.post.id, 'upVote')}>Upvote</span>
+          <span className="button is-small is-info" onClick={() => this.handleUpdate(this.props.post.id)}>Edit</span>
           <span className="button is-small is-warning" onClick={() => this.handleVote(this.props.post.id, 'downVote')}>Downvote</span>
           <span className="button is-small is-danger" onClick={this.handleDeletion}>Delete Post</span>
         </div>

@@ -1,4 +1,5 @@
 export const CREATE_POST = 'CREATE_POST';
+export const EDIT_POST = 'EDIT_POST';
 export const UPVOTE_POST = 'UPVOTE_POST';
 export const DOWNVOTE_POST = 'DOWNVOTE_POST';
 export const REMOVE_POST = 'REMOVE_POST';
@@ -23,6 +24,18 @@ export function createPost({ id, title, author, body, category }) {
     author,
     body,
     category
+  };
+}
+
+export function editPost({ id, title, author, body, category, voteScore }) {
+  return {
+    type: EDIT_POST,
+    id,
+    title,
+    author,
+    body,
+    category,
+    voteScore
   };
 }
 
@@ -207,6 +220,10 @@ export function deleteData(url, callback) {
 
 export function sendCommentEditsToServer(comment) {
   return putData(`/comments/${comment.id}`, comment, editComment);
+}
+
+export function sendPostEditsToServer(post) {
+  return putData(`/posts/${post.id}`, post, editPost);
 }
 
 export function putData(url, payload, callback) {

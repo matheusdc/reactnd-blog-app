@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 
 import {
   CREATE_POST,
+  EDIT_POST,
   UPVOTE_POST,
   DOWNVOTE_POST,
   REMOVE_POST,
@@ -18,7 +19,7 @@ import {
 } from '../actions';
 
 function post(state = { posts: [] }, action) {
-  const { id, title, author, body, category, timestamp } = action;
+  const { id, title, author, body, category, timestamp, voteScore } = action;
 
   switch (action.type) {
     case CREATE_POST:
@@ -37,11 +38,32 @@ function post(state = { posts: [] }, action) {
         ...state,
         posts: state.posts.concat([post])
       };
+
+    case EDIT_POST:
+      const editedPost = {
+        id,
+        title,
+        author,
+        body,
+        timestamp,
+        category,
+        voteScore,
+        deleted: false
+      };
+
+      const editedPosts = state.posts.map(post => 
+        (post.id === editedPost.id) ? Object.assign(post,editedPost) : post);
+
+      return {
+        ...state,
+        posts: editedPosts
+      };
     case UPVOTE_POST:
       return {
         ...state,
         activePost: {...state.activePost, voteScore: state.activePost.voteScore + 1}
       };
+
     case DOWNVOTE_POST:
       return {
         ...state,
@@ -102,7 +124,7 @@ function comment(state = { comments: [], editingComment: '' }, action) {
       };
 
       const editedComments = state.comments.map(comment => 
-        (comment.id === editedComment.id) ? editedComment : comment);
+        (comment.id === editedComment.id) ? Object.assign(comment, editedComment) : comment);
 
       return {
         ...state,
