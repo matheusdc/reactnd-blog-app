@@ -43,7 +43,7 @@ class Posts extends Component {
           </ul>
         </div>
         {this.props.posts.filter(post => !post.deleted).sort(this.sortMethod).map(post => (
-          <div key={post.id}><PostHeadline {...post} /></div>
+          <PostHeadline key={post.id} {...post} />
         ))}
       </div>
     );

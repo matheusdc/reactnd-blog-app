@@ -88,24 +88,24 @@ export function editingComment({ id }) {
   };
 }
 
-export function upVoteComment({ id }) {
+export function upVoteComment(comment) {
   return {
     type: UPVOTE_COMMENT,
-    id
+    ...comment
   };
 }
 
-export function downVoteComment({ id }) {
+export function downVoteComment(comment) {
   return {
     type: DOWNVOTE_COMMENT,
-    id
+    ...comment
   };
 }
 
-export function removeComment({ id }) {
+export function removeComment(comment) {
   return {
     type: REMOVE_COMMENT,
-    id
+    ...comment
   };
 }
 
@@ -126,7 +126,8 @@ export function postsFetchSuccess(posts) {
 export function fetchActivePostSuccess(activePost) {
   return {
     type: FETCH_ACTIVE_POST,
-    activePost
+    activePost,
+    notFound: (Object.keys(activePost).length === 0)
   };
 }
 

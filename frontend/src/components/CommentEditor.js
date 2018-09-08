@@ -81,7 +81,7 @@ class CommentEditor extends Component {
 
           <div className="field">
             <div className="control">
-              <button onClick={this.handleSubmit} className="button is-link is-small">{(this.state.editing) ? 'Save changes' : 'Comment' }</button>
+              <button onClick={this.handleSubmit} className="button is-link is-small" disabled={(!this.state.body || !this.state.author)}>{(this.state.editing) ? 'Save changes' : 'Comment' }</button>
             </div>
           </div>
         </div>

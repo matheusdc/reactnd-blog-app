@@ -18,7 +18,7 @@ import {
   FETCH_COMMENTS
 } from '../actions';
 
-function post(state = { posts: [] }, action) {
+function post(state = { posts: [], activePost: {}, notFound: false }, action) {
   const { id, title, author, body, category, timestamp, voteScore } = action;
 
   switch (action.type) {
@@ -61,18 +61,23 @@ function post(state = { posts: [] }, action) {
     case UPVOTE_POST:
       return {
         ...state,
+        posts: state.posts.map(post => 
+          (post.id === id) ? Object.assign(post, { voteScore: post.voteScore + 1 }) : post),
         activePost: {...state.activePost, voteScore: state.activePost.voteScore + 1}
       };
 
     case DOWNVOTE_POST:
       return {
         ...state,
+        posts: state.posts.map(post => 
+          (post.id === id) ? Object.assign(post, { voteScore: post.voteScore - 1 }) : post),
         activePost: {...state.activePost, voteScore: state.activePost.voteScore - 1}
       };
     case REMOVE_POST:
       return {
         ...state,
-        posts: state.posts.filter(post => (post.id !== id))
+        posts: state.posts.map(post => 
+          (post.id === id) ? Object.assign(post, { deleted: true }) : post),
       };
     case FETCH_POSTS:
       const { posts } = action;
@@ -81,10 +86,11 @@ function post(state = { posts: [] }, action) {
         posts
       };
     case FETCH_ACTIVE_POST:
-      const { activePost } = action;
+      const { activePost, notFound } = action;
       return {
         ...state,
-        activePost
+        activePost,
+        notFound
       };
     default:
       return {
@@ -93,8 +99,8 @@ function post(state = { posts: [] }, action) {
   }
 }
 
-function comment(state = { comments: [], editingComment: '' }, action) {
-  const { id, parentId, author, body } = action;
+function comment(state = { editingComment: '' }, action) {
+  const { id, parentId, author, body, voteScore, timestamp } = action;
 
   switch (action.type) {
     case ADD_COMMENT:
@@ -103,7 +109,7 @@ function comment(state = { comments: [], editingComment: '' }, action) {
         parentId,
         author,
         body,
-        timestamp: new Date().getTime(),
+        timestamp,
         voteScore: 1,
         deleted: false,
         parentDeleted: false
@@ -111,7 +117,7 @@ function comment(state = { comments: [], editingComment: '' }, action) {
 
       return {
         ...state,
-        comments: state.comments.concat([comment])
+        [parentId]: (state[parentId]) ? state[parentId].concat([comment]) : [comment]
       };
 
     case EDIT_COMMENT:
@@ -119,16 +125,15 @@ function comment(state = { comments: [], editingComment: '' }, action) {
         id,
         parentId,
         author,
-        body,
-        timestamp: new Date().getTime(),
+        body
       };
 
-      const editedComments = state.comments.map(comment => 
+      const editedComments = state[parentId].map(comment => 
         (comment.id === editedComment.id) ? Object.assign(comment, editedComment) : comment);
 
       return {
         ...state,
-        comments: editedComments,
+        [parentId]: editedComments,
         editingComment: ''
       };
 
@@ -141,31 +146,31 @@ function comment(state = { comments: [], editingComment: '' }, action) {
     case REMOVE_COMMENT:
       return {
         ...state,
-        comments: state.comments.filter(comment => (comment.id !== id))
+        [parentId]: state[parentId].map(comment => 
+          (comment.id === id) ? Object.assign(comment, { deleted: true }) : comment),
       };
     case UPVOTE_COMMENT:
       return {
         ...state,
-        comments: state.comments.map(comment => {
-          if(comment.id === id) comment.voteScore = comment.voteScore + 1;
-          return comment; 
-        })
+        [parentId]: state[parentId].map(comment => 
+          (comment.id === id) ? Object.assign(comment, { voteScore: voteScore }) : comment), 
       };
     case DOWNVOTE_COMMENT:
       return {
         ...state,
-        comments: state.comments.map(comment => {
-          if(comment.id === id) comment.voteScore = comment.voteScore - 1;
-          return comment;
-        })
+        [parentId]: state[parentId].map(comment => 
+          (comment.id === id) ? Object.assign(comment, { voteScore: voteScore }) : comment), 
       };
     case FETCH_COMMENTS:
       const { comments } = action;
 
-      return {
-        ...state,
-        comments
-      };
+      if(comments.length > 0) {
+        return {
+          ...state,
+          [comments[0].parentId]: comments,
+        };
+      }
+      return { ...state }
     default:
       return {
         ...state

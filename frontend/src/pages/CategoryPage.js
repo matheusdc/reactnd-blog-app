@@ -13,7 +13,7 @@ class CategoryPage extends Component {
 
   fetchPosts () {
     const category = this.props.match.params.id;
-    this.props.fetchData(category);
+    this.props.fetchPosts(category);
   }
 
   componentDidMount() {
@@ -31,7 +31,7 @@ class CategoryPage extends Component {
     return (
       <div className="column">
         <h2 className="title">{(categoryName) ? categoryName + ' Category' : 'All Categories'}</h2>
-        <Posts posts={this.props.posts} />
+        <Posts posts={this.props.posts} /> 
       </div>
     );
   }
@@ -45,7 +45,7 @@ function mapStateToProps({ post }) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (name) => dispatch(fetchPostsByCategory(name))
+    fetchPosts: (name) => dispatch(fetchPostsByCategory(name))
   };
 };
 

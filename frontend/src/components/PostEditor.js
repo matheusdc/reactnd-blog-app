@@ -32,7 +32,7 @@ class PostEditor extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.title !== this.props.title) {
+    if(prevProps.title !== this.props.title && typeof this.props.title !== 'undefined') {
       this.setState({
         title: this.props.title,
         author: this.props.author,
@@ -111,7 +111,7 @@ class PostEditor extends Component {
 
         <div className="field">
           <div className="control">
-            <button onClick={this.handleSubmit} className="button is-link">{(this.state.editing) ? 'Save changes' : 'Submit'}</button>
+            <button onClick={this.handleSubmit} className="button is-link" disabled={!this.state.title || !this.state.author || !this.state.category || !this.state.body}>{(this.state.editing) ? 'Save changes' : 'Submit'}</button>
           </div>
         </div>
       </div>

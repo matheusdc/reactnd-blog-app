@@ -6422,8 +6422,12 @@ label.panel-block {
 html {
   margin: 64px; }
 
-.tag {
+.tag.margin-left {
   margin-left: 5px; }
 
-.comment, .post {
+.buttons .button.info {
+  pointer-events: none;
+  margin-right: 10px !important; }
+
+.comment, .post, .action-buttons {
   margin-bottom: 10px; }

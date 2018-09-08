@@ -6,50 +6,33 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { fetchPostById, fetchCommentsFromPost, deletePost, votePost } from '../actions';
+import { fetchPostById, fetchCommentsFromPost } from '../actions';
 import CommentEditor from '../components/CommentEditor';
 import Comments from '../components/Comments';
 import PostDetails from '../components/PostDetails';
+import PostActionButtons from '../components/PostActionButtons';
 
 class PostPage extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.handleDeletion = this.handleDeletion.bind(this);
-    this.handleVote = this.handleVote.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this);
-  }
 
   componentDidMount() {
     this.props.fetchPostById(this.props.match.params.id);
     this.props.fetchCommentsFromPost(this.props.match.params.id);
   }
 
-  handleDeletion() {
-    this.props.deletePost(this.props.post.id);
-    this.props.history.push('/');
-  }
-
-  handleVote(id, vote) {
-    this.props.handleVote(id, vote);
-  }
-
-  handleUpdate(id) {
-    this.props.history.push(`/edit/${id}`);
+  componentDidUpdate() {
+    if(this.props.notFound)
+      this.props.history.push('/');
   }
 
   render() {
+    if(!this.props.post) 
+      return <div className="column">Please wait, loading post...</div>;
+
     return (
       <div className="column">
         <PostDetails {...this.props.post} />
 
-        <div className="buttons has-addons">
-          <span className="button is-small is-success" onClick={() => this.handleVote(this.props.post.id, 'upVote')}>Upvote</span>
-          <span className="button is-small is-info" onClick={() => this.handleUpdate(this.props.post.id)}>Edit</span>
-          <span className="button is-small is-warning" onClick={() => this.handleVote(this.props.post.id, 'downVote')}>Downvote</span>
-          <span className="button is-small is-danger" onClick={this.handleDeletion}>Delete Post</span>
-        </div>
+        <PostActionButtons id={this.props.post.id} voteScore={this.props.post.voteScore}/>
 
         <CommentEditor post={this.props.post} />
 
@@ -60,18 +43,22 @@ class PostPage extends Component {
 }
 
 function mapStateToProps({ post, comment }) {
+  let comments = [];
+  if(post.activePost.id && comment[post.activePost.id]) {
+    comments = comment[post.activePost.id]
+  }
+
   return {
     post: post.activePost,
-    comments: comment.comments
+    notFound: post.notFound,
+    comments,
   };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchPostById: (id) => dispatch(fetchPostById(id)),
-    fetchCommentsFromPost: (PostId) => dispatch(fetchCommentsFromPost(PostId)),
-    deletePost: (id) => dispatch(deletePost(id)),
-    handleVote: (id, vote) => dispatch(votePost(id, vote))
+    fetchCommentsFromPost: (PostId) => dispatch(fetchCommentsFromPost(PostId))
   };
 };
 

@@ -12,7 +12,9 @@ const Comment = (props) => {
       </div>
       <footer className="card-footer">
         <div className="card-footer-item">{props.author}</div>
-        <div className="card-footer-item">Vote Score: {props.voteScore}</div>
+        <div className="card-footer-item">
+          <span className="tag is-dark">Vote Score: {props.voteScore}</span>
+        </div>
         <div className="card-footer-item">
           <div className="buttons has-addons">
             <span className="button is-small is-success" onClick={() => props.handleVote(props.id, 'upVote')}>Upvote</span>
