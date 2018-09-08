@@ -9,6 +9,7 @@ import Categories from './components/Categories';
 import CategoryPage from './pages/CategoryPage';
 import PostPage from './pages/PostPage';
 import EditPostPage from './pages/EditPostPage';
+import NotFound from './pages/NotFound';
 
 class App extends Component {
 
@@ -22,6 +23,7 @@ class App extends Component {
         <Route exact path="/posts/:id" component={PostPage}/>
         <Route exact path="/new" component={PostEditor}/>
         <Route exact path="/edit/:id" component={EditPostPage}/>
+        <Route exact path="/404" component={NotFound}/>
       </div>
     );
   }

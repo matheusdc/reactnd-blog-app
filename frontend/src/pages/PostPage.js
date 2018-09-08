@@ -21,7 +21,7 @@ class PostPage extends Component {
 
   componentDidUpdate() {
     if(this.props.notFound)
-      this.props.history.push('/');
+      this.props.history.push('/404');
   }
 
   render() {
